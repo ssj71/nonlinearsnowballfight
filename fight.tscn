@@ -1,0 +1,154 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://noisetexture0.tres" type="Texture" id=1]
+[ext_resource path="res://noisetexture1.tres" type="Texture" id=2]
+[ext_resource path="res://noisetexture2.tres" type="Texture" id=3]
+[ext_resource path="res://noisetexture3.tres" type="Texture" id=4]
+[ext_resource path="res://man-stand.svg" type="Texture" id=5]
+[ext_resource path="res://man-run1.svg" type="Texture" id=6]
+[ext_resource path="res://man-run2.svg" type="Texture" id=7]
+[ext_resource path="res://man-run3.svg" type="Texture" id=8]
+[ext_resource path="res://Player.gd" type="Script" id=9]
+
+[sub_resource type="SpriteFrames" id=1]
+
+animations = [ {
+"frames": [ ExtResource( 1 ), ExtResource( 2 ), ExtResource( 3 ), ExtResource( 4 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.19
+} ]
+
+[sub_resource type="RectangleShape2D" id=2]
+
+custom_solver_bias = 0.0
+extents = Vector2( 60, 60 )
+
+[sub_resource type="SpriteFrames" id=3]
+
+animations = [ {
+"frames": [ ExtResource( 5 ) ],
+"loop": false,
+"name": "stand",
+"speed": 1.0
+}, {
+"frames": [ ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ) ],
+"loop": true,
+"name": "run",
+"speed": 7.0
+} ]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="BG" type="Polygon2D" parent="."]
+position = Vector2( 1, -2 )
+polygon = PoolVector2Array( -2, 0, 640, 0, 640, 480, 0, 480 )
+uv = PoolVector2Array(  )
+splits = PoolIntArray(  )
+color = Color( 1, 1, 1, 1 )
+vertex_colors = PoolColorArray(  )
+offset = Vector2( 0, 0 )
+antialiased = false
+texture = null
+texture_offset = Vector2( 0, 0 )
+texture_scale = Vector2( 1, 1 )
+texture_rotation_degrees = 0.0
+skeleton = NodePath("")
+invert_enable = false
+invert_border = 100.0
+bones = [  ]
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="BG"]
+position = Vector2( 319, 240 )
+frames = SubResource( 1 )
+animation = "default"
+frame = 2
+playing = true
+
+[node name="A1" type="Area2D" parent="."]
+position = Vector2( 189, 138 )
+input_pickable = true
+gravity_vec = Vector2( 0, 0 )
+gravity = 0.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="A1"]
+shape = SubResource( 2 )
+
+[node name="A2" type="Area2D" parent="."]
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="A2"]
+position = Vector2( 311, 138 )
+shape = SubResource( 2 )
+
+[node name="A3" type="Area2D" parent="."]
+position = Vector2( 189, 138 )
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="A3"]
+position = Vector2( 244, 0 )
+shape = SubResource( 2 )
+
+[node name="B1" type="Area2D" parent="."]
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="B1"]
+position = Vector2( 190, 261 )
+shape = SubResource( 2 )
+
+[node name="B2" type="Area2D" parent="."]
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="B2"]
+position = Vector2( 312, 262 )
+shape = SubResource( 2 )
+
+[node name="B3" type="Area2D" parent="."]
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="B3"]
+position = Vector2( 434, 261 )
+shape = SubResource( 2 )
+
+[node name="Player" type="AnimatedSprite" parent="."]
+position = Vector2( 45, 35 )
+scale = Vector2( 1.5, 1.5 )
+frames = SubResource( 3 )
+animation = "stand"
+playing = true
+script = ExtResource( 9 )
+
