@@ -4,6 +4,13 @@ extends KinematicBody2D
 var speed = 200
 var hold = 0
 var copies = []
+var direction = Vector2(1,0);
+
+func wrap_pos(p):
+	var p2 = p
+	p2.x = (p.x if p.x>0 else p.x+640.0) if p.x < 640.0 else p.x-640
+	p2.y = (p.y if p.y>0 else p.y+480.0) if p.y < 480.0 else p.y-480
+	return p2
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -23,15 +30,13 @@ func _ready():
 func _process(delta):
 	if Input.is_key_pressed(KEY_SPACE):
 		hold = hold + delta
-	elif hold != 0:
-		#var ball = RigidBody2D
-		#var sp = Sprite
-		#ball.x = position.x
-		#ball.y = position.y
-		#sp.
-		#ball.add_child( Sprite )
-		#get_parent().add_child(ball)
-		hold = 0
+	elif hold > 0.6:
+		var ball = load("res://ball.tscn").instance()
+		var Balls = get_node("../Balls")
+		ball.position = wrap_pos(position)
+		ball.vel = min(max(hold,1.1),5)*speed*direction #bounds so that they don't run into their own, and so snowballs don't go forever
+		Balls.add_child(ball)
+		hold = 0.6 # preload the hold time so they only have to hold for .5 sec before it makes it faster
 	var vel = Vector2(0, 0)
 	if Input.is_key_pressed(KEY_RIGHT):
 		vel.x = 1
@@ -52,7 +57,8 @@ func _process(delta):
 	for i in range(4):
 		copies[i].get_child(0).animation = "run"
 
-	position += speed * vel.normalized() * delta
+	direction = vel.normalized()
+	position += speed * direction * delta
 	if position.x < -440:
 		position.x += 640
 	elif position.x > 440:

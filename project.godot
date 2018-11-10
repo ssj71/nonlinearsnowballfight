@@ -19,6 +19,13 @@ config/name="NonLinearSnowBallFight"
 run/main_scene="res://fight.tscn"
 config/icon="res://icon.png"
 
+[display]
+
+window/size/width=640
+window/size/height=480
+window/stretch/mode="viewport"
+window/stretch/aspect="keep"
+
 [rendering]
 
 environment/default_environment="res://default_env.tres"

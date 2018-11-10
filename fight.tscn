@@ -5,11 +5,12 @@
 [ext_resource path="res://noisetexture2.tres" type="Texture" id=3]
 [ext_resource path="res://noisetexture3.tres" type="Texture" id=4]
 [ext_resource path="res://Player.gd" type="Script" id=5]
-[ext_resource path="res://man-stand.svg" type="Texture" id=6]
-[ext_resource path="res://man-run1.svg" type="Texture" id=7]
-[ext_resource path="res://man-run2.svg" type="Texture" id=8]
-[ext_resource path="res://man-run3.svg" type="Texture" id=9]
+[ext_resource path="res://man-run1.svg" type="Texture" id=6]
+[ext_resource path="res://man-run2.svg" type="Texture" id=7]
+[ext_resource path="res://man-run3.svg" type="Texture" id=8]
+[ext_resource path="res://man-stand.svg" type="Texture" id=9]
 [ext_resource path="res://ball.svg" type="Texture" id=10]
+[ext_resource path="res://Balls.gd" type="Script" id=11]
 
 [sub_resource type="SpriteFrames" id=1]
 
@@ -20,32 +21,27 @@ animations = [ {
 "speed": 5.19
 } ]
 
-[sub_resource type="RectangleShape2D" id=2]
-
-custom_solver_bias = 0.0
-extents = Vector2( 60, 60 )
-
-[sub_resource type="CapsuleShape2D" id=3]
+[sub_resource type="CapsuleShape2D" id=2]
 
 custom_solver_bias = 0.0
 radius = 14.9246
 height = 20.0
 
-[sub_resource type="SpriteFrames" id=4]
+[sub_resource type="SpriteFrames" id=3]
 
 animations = [ {
-"frames": [ ExtResource( 6 ) ],
-"loop": false,
-"name": "stand",
-"speed": 1.0
-}, {
-"frames": [ ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ) ],
+"frames": [ ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ) ],
 "loop": true,
 "name": "run",
 "speed": 7.0
+}, {
+"frames": [ ExtResource( 9 ) ],
+"loop": false,
+"name": "stand",
+"speed": 1.0
 } ]
 
-[sub_resource type="CircleShape2D" id=7]
+[sub_resource type="CircleShape2D" id=6]
 
 custom_solver_bias = 0.0
 radius = 7.08656
@@ -71,93 +67,13 @@ invert_border = 100.0
 bones = [  ]
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="BG"]
-position = Vector2( 319, 240 )
+position = Vector2( 319, 241 )
 frames = SubResource( 1 )
 animation = "default"
 frame = 3
 playing = true
 
-[node name="A1" type="Area2D" parent="."]
-position = Vector2( 189, 138 )
-input_pickable = true
-gravity_vec = Vector2( 0, 0 )
-gravity = 0.0
-linear_damp = 0.1
-angular_damp = 1.0
-audio_bus_override = false
-audio_bus_name = "Master"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="A1"]
-shape = SubResource( 2 )
-
-[node name="A2" type="Area2D" parent="."]
-input_pickable = true
-gravity_vec = Vector2( 0, 1 )
-gravity = 98.0
-linear_damp = 0.1
-angular_damp = 1.0
-audio_bus_override = false
-audio_bus_name = "Master"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="A2"]
-position = Vector2( 311, 138 )
-shape = SubResource( 2 )
-
-[node name="A3" type="Area2D" parent="."]
-position = Vector2( 189, 138 )
-input_pickable = true
-gravity_vec = Vector2( 0, 1 )
-gravity = 98.0
-linear_damp = 0.1
-angular_damp = 1.0
-audio_bus_override = false
-audio_bus_name = "Master"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="A3"]
-position = Vector2( 244, 0 )
-shape = SubResource( 2 )
-
-[node name="B1" type="Area2D" parent="."]
-input_pickable = true
-gravity_vec = Vector2( 0, 1 )
-gravity = 98.0
-linear_damp = 0.1
-angular_damp = 1.0
-audio_bus_override = false
-audio_bus_name = "Master"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="B1"]
-position = Vector2( 190, 261 )
-shape = SubResource( 2 )
-
-[node name="B2" type="Area2D" parent="."]
-input_pickable = true
-gravity_vec = Vector2( 0, 1 )
-gravity = 98.0
-linear_damp = 0.1
-angular_damp = 1.0
-audio_bus_override = false
-audio_bus_name = "Master"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="B2"]
-position = Vector2( 312, 262 )
-shape = SubResource( 2 )
-
-[node name="B3" type="Area2D" parent="."]
-input_pickable = true
-gravity_vec = Vector2( 0, 1 )
-gravity = 98.0
-linear_damp = 0.1
-angular_damp = 1.0
-audio_bus_override = false
-audio_bus_name = "Master"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="B3"]
-position = Vector2( 434, 261 )
-shape = SubResource( 2 )
-
 [node name="Player" type="KinematicBody2D" parent="."]
-position = Vector2( 62, 76 )
 input_pickable = false
 collision_layer = 1
 collision_mask = 1
@@ -166,11 +82,13 @@ motion/sync_to_physics = false
 script = ExtResource( 5 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
-shape = SubResource( 3 )
+position = Vector2( 62, 76 )
+shape = SubResource( 2 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="Player/CollisionShape2D"]
+position = Vector2( -0.315601, -3.4711 )
 scale = Vector2( 1.5, 1.5 )
-frames = SubResource( 4 )
+frames = SubResource( 3 )
 animation = "stand"
 playing = true
 
@@ -194,9 +112,12 @@ angular_velocity = 0.0
 angular_damp = -1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
-shape = SubResource( 7 )
+shape = SubResource( 6 )
 
 [node name="ball" type="Sprite" parent="RigidBody2D/CollisionShape2D"]
 scale = Vector2( 0.2, 0.2 )
 texture = ExtResource( 10 )
+
+[node name="Balls" type="Node2D" parent="."]
+script = ExtResource( 11 )
 
