@@ -1,16 +1,15 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://noisetexture0.tres" type="Texture" id=1]
 [ext_resource path="res://noisetexture1.tres" type="Texture" id=2]
 [ext_resource path="res://noisetexture2.tres" type="Texture" id=3]
 [ext_resource path="res://noisetexture3.tres" type="Texture" id=4]
 [ext_resource path="res://Player.gd" type="Script" id=5]
-[ext_resource path="res://man-run1.svg" type="Texture" id=6]
-[ext_resource path="res://man-run2.svg" type="Texture" id=7]
-[ext_resource path="res://man-run3.svg" type="Texture" id=8]
-[ext_resource path="res://man-stand.svg" type="Texture" id=9]
-[ext_resource path="res://ball.svg" type="Texture" id=10]
-[ext_resource path="res://Balls.gd" type="Script" id=11]
+[ext_resource path="res://man-stand.svg" type="Texture" id=6]
+[ext_resource path="res://man-run1.svg" type="Texture" id=7]
+[ext_resource path="res://man-run2.svg" type="Texture" id=8]
+[ext_resource path="res://man-run3.svg" type="Texture" id=9]
+[ext_resource path="res://Balls.gd" type="Script" id=10]
 
 [sub_resource type="SpriteFrames" id=1]
 
@@ -30,21 +29,16 @@ height = 20.0
 [sub_resource type="SpriteFrames" id=3]
 
 animations = [ {
-"frames": [ ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ) ],
-"loop": true,
-"name": "run",
-"speed": 7.0
-}, {
-"frames": [ ExtResource( 9 ) ],
+"frames": [ ExtResource( 6 ) ],
 "loop": false,
 "name": "stand",
 "speed": 1.0
+}, {
+"frames": [ ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ) ],
+"loop": true,
+"name": "run",
+"speed": 7.0
 } ]
-
-[sub_resource type="CircleShape2D" id=6]
-
-custom_solver_bias = 0.0
-radius = 7.08656
 
 [node name="Node2D" type="Node2D"]
 
@@ -70,7 +64,6 @@ bones = [  ]
 position = Vector2( 319, 241 )
 frames = SubResource( 1 )
 animation = "default"
-frame = 3
 playing = true
 
 [node name="Player" type="KinematicBody2D" parent="."]
@@ -92,32 +85,6 @@ frames = SubResource( 3 )
 animation = "stand"
 playing = true
 
-[node name="RigidBody2D" type="RigidBody2D" parent="."]
-position = Vector2( 160.136, 60.149 )
-input_pickable = false
-collision_layer = 1
-collision_mask = 1
-mode = 0
-mass = 6133.91
-gravity_scale = 0.0
-custom_integrator = false
-continuous_cd = 0
-contacts_reported = 0
-contact_monitor = false
-sleeping = false
-can_sleep = true
-linear_velocity = Vector2( 0, 0 )
-linear_damp = 3.58
-angular_velocity = 0.0
-angular_damp = -1.0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
-shape = SubResource( 6 )
-
-[node name="ball" type="Sprite" parent="RigidBody2D/CollisionShape2D"]
-scale = Vector2( 0.2, 0.2 )
-texture = ExtResource( 10 )
-
 [node name="Balls" type="Node2D" parent="."]
-script = ExtResource( 11 )
+script = ExtResource( 10 )
 
