@@ -4,7 +4,7 @@ extends Node2D
 # var a = 2
 # var b = "text"
 var teleporten = []
-var decay = 300
+var decay = 600
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -12,14 +12,18 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
-	for child in get_children():
-		child.position += delta*child.vel
-		var dir = child.vel.normalized()
+	for ball in get_children():
+		ball.position += delta*ball.vel
+		var dir = ball.vel.normalized()
 		#max vel is 1000px/sec, min is 300px/sec
-		child.vel -= delta*decay*dir/child.vel.length_squared()
+		ball.vel -= delta*decay*dir/ball.vel.length_squared()
+		if ball.vel.length() < 1:
+			remove_child(ball)
+		#if ball.position.x
 		
-		if child.vel.length() < 1:
-			remove_child(child)
 		
+func teleport_x(ball):
+	print("x" + ball.name)
 		
+func teleport_y(ball):
+	print("y" + ball.name)
