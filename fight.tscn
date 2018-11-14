@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://noisetexture0.tres" type="Texture" id=1]
 [ext_resource path="res://noisetexture1.tres" type="Texture" id=2]
@@ -11,7 +11,6 @@
 [ext_resource path="res://man-run3.svg" type="Texture" id=9]
 [ext_resource path="res://Balls.gd" type="Script" id=10]
 [ext_resource path="res://Teleports.gd" type="Script" id=11]
-[ext_resource path="res://Area2D.gd" type="Script" id=12]
 
 [sub_resource type="SpriteFrames" id=1]
 
@@ -41,11 +40,6 @@ animations = [ {
 "name": "run",
 "speed": 7.0
 } ]
-
-[sub_resource type="RectangleShape2D" id=4]
-
-custom_solver_bias = 0.0
-extents = Vector2( 1, 80 )
 
 [node name="Node2D" type="Node2D"]
 
@@ -100,18 +94,4 @@ script = ExtResource( 10 )
 
 [node name="Teleports" type="Node2D" parent="."]
 script = ExtResource( 11 )
-
-[node name="Area2D" type="Area2D" parent="Teleports"]
-input_pickable = true
-gravity_vec = Vector2( 0, 1 )
-gravity = 98.0
-linear_damp = 0.1
-angular_damp = 1.0
-audio_bus_override = false
-audio_bus_name = "Master"
-script = ExtResource( 12 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Teleports/Area2D"]
-position = Vector2( 0, 80 )
-shape = SubResource( 4 )
 

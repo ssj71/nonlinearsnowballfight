@@ -4,7 +4,7 @@ extends Node2D
 # var a = 2
 # var b = "text"
 var teleporten = []
-var decay = 600
+var decay = 1000
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -19,11 +19,4 @@ func _process(delta):
 		ball.vel -= delta*decay*dir/ball.vel.length_squared()
 		if ball.vel.length() < 1:
 			remove_child(ball)
-		#if ball.position.x
-		
-		
-func teleport_x(ball):
-	print("x" + ball.name)
-		
-func teleport_y(ball):
-	print("y" + ball.name)
+	

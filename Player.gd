@@ -2,7 +2,7 @@ extends Area2D
 
 # Declare member variables here.
 var speed = 200
-var hold = 0
+var hold = 0.4
 var copies = []
 var direction = Vector2(1,0);
 
@@ -29,14 +29,21 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if Input.is_key_pressed(KEY_SPACE):
-		hold = hold + delta
-	elif hold > 0.6:
+		hold += delta
+	elif hold > 0.8:
 		var ball = load("res://ball.tscn").instance()
 		var Balls = get_node("../Balls")
 		ball.position = wrap_pos(position)
+		ball.origin = (ball.position/160).floor()
+		ball.thrower = self
 		ball.vel = min(max(hold,1.1),5)*speed*direction #bounds so that they don't run into their own, and so snowballs don't go forever
+		ball.hookup(Balls)
 		Balls.add_child(ball)
-		hold = 0.6 # preload the hold time so they only have to hold for .5 sec before it makes it faster
+		hold = 0.6 # preload the hold time so they only have to hold for .5 sec before it makes it faster, but they can't shoot more than 5/sec
+	elif hold<0.8:
+		hold += delta
+		if hold > 0.8:
+			hold = 0.8
 	var vel = Vector2(0, 0)
 	if Input.is_key_pressed(KEY_RIGHT):
 		vel.x = 1
@@ -59,6 +66,7 @@ func _process(delta):
 
 	direction = vel.normalized()
 	position += speed * direction * delta
+	#shift to another copy if nearing an edge
 	if position.x < -440:
 		position.x += 640
 	elif position.x > 440:
@@ -67,5 +75,10 @@ func _process(delta):
 		position.y += 480
 	elif position.y > 280:
 		position.y -= 480
-	#position.x = min(max(position.x,0),640)
-	#position.y = min(max(position.y,0),480)
+
+#func _notification(what):
+#    if (what == NOTIFICATION_PREDELETE):
+#		var i = 0
+		
+		#for i in range(4):
+		#copies[i].free()
