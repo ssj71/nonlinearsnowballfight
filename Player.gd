@@ -36,7 +36,7 @@ func _process(delta):
 		ball.position = wrap_pos(position)
 		ball.origin = (ball.position/160).floor()
 		ball.thrower = self
-		ball.vel = min(max(hold,1.1),5)*speed*direction #bounds so that they don't run into their own, and so snowballs don't go forever
+		ball.vel = min(max(hold,1.1),2.5)*speed*direction #bounds so that they don't run into their own, and so snowballs don't go forever
 		ball.hookup(Balls)
 		Balls.add_child(ball)
 		hold = 0.6 # preload the hold time so they only have to hold for .5 sec before it makes it faster, but they can't shoot more than 5/sec

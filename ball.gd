@@ -24,5 +24,7 @@ func hit(area):
 		area.free()
 	elif area.name.match("@Teleport@*"):
 		#add to teleported list
-		vel = Vector2(0,0)
+		teleported = true
+		#vel = Vector2(0,0)#kills the ball
+		#thrower = null
 	
