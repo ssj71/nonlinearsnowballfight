@@ -25,6 +25,8 @@ func hit(area):
 	elif area.name.match("@Teleport@*"):
 		#add to teleported list
 		teleported = true
+		var T = get_node("../../Teleports")
+		print("telid ",T.teleid(area.position))
 		#vel = Vector2(0,0)#kills the ball
 		#thrower = null
 	

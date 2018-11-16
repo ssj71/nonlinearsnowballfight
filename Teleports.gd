@@ -5,7 +5,7 @@ extends Node2D
 # var b = "text"
 var nonlinearity = 1
 var telemap = []
-# 1 - squares shuffle, directions remain the same
+# 1 - teleports shuffle seprately for vert/horiz, directions remain the same
 # 2 - all sides shuffle
 # 3 - teleports are non-transitive a->b but b->c
 
@@ -18,14 +18,6 @@ var telemap = []
 #    8   9   10  11
 # 20   21  22  23  20
 #    0   1   2   3
-
-#    0   1   2   3
-# 16   17  18  19  20
-#    4   5   6   7
-# 21   22  23  24  25
-#    8   9   10  11
-# 26   27  28  29  30
-#    12  13  14  15
 
 func teleid(pos):
 	var h = (int(pos.x)%160)/80*((pos.x-80)/160 + (int(pos.y)%480)/40) # horizontal ports
@@ -62,15 +54,33 @@ func newtele(x,y,w,h):
 	add_child(tel)
 	
 func shuffle():
+	randomize()
 	if nonlinearity == 1:
 		#shuffle the horizontal and vertical teleports separately
-		var h = range(16)
-		var v = range(16,31)
-		h.shuffle()
-		v.shuffle()
-		telemap = [h, v]
+		telemap = range(48)
+		for i in range(48):
+			telemap[i] = -1
+		var i = 0
+		while i < 24:
+			var repull = true
+			while repull:
+				var offset = i
+				if i >= 12:
+					offset -= 12
+				var v = randi()%(12-offset) + i
+				if v == i or telemap[v] != -1:
+					repull = true
+				else:
+					repull = false
+					telemap[i] = v
+					telemap[v] = i
+					#and the negative
+					telemap[i+24] = v+24
+					telemap[v+24] = i+24
+			while telemap[i] != -1 and i < 24:
+				i += 1
 	#TODO: elif nonlinearity == 2:
-	
+	print(telemap)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -84,8 +94,7 @@ func _ready():
 		newtele(640,160*y+80,1,76)
 	shuffle()
 	
-	for i in range(24):
-		print(i,telepos(i),teleid(telepos(i)))
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

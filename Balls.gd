@@ -17,7 +17,7 @@ func _process(delta):
 		var dir = ball.vel.normalized()
 		#max vel is 1000px/sec, min is 300px/sec
 		ball.vel -= delta*dir*(decay/ball.vel.length_squared() + 0)
-		print(ball.vel, ball.vel.normalized(),dir, ball.vel.normalized() == -dir)
+		#print(ball.vel, ball.vel.normalized(),dir, ball.vel.normalized() == -dir)
 		#dir = ball.vel.reverse()
 		if ball.vel.length() < 100 or ball.vel.normalized() == -dir:
 			remove_child(ball)
