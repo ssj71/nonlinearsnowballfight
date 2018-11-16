@@ -12,6 +12,14 @@ var telemap = []
 #each teleport has an id based on its position, this makes shuffling easier
 #ids are assigned to all horizontal teleports, then all vertical
 #    0   1   2   3
+# 12   13  14  15  12
+#    4   5   6   7
+# 16   17  18  19  16
+#    8   9   10  11
+# 20   21  22  23  20
+#    0   1   2   3
+
+#    0   1   2   3
 # 16   17  18  19  20
 #    4   5   6   7
 # 21   22  23  24  25
@@ -20,22 +28,22 @@ var telemap = []
 #    12  13  14  15
 
 func teleid(pos):
-	var h = (int(pos.x)%160)/80*((pos.x-80)/160 + (pos.y)/40)
-	var v = (int(pos.y)%160)/80*((pos.x)/160 + (pos.y-80)/32 + 16)
+	var h = (int(pos.x)%160)/80*((pos.x-80)/160 + (int(pos.y)%480)/40) # horizontal ports
+	var v = (int(pos.y)%160)/80*((int(pos.x)%640)/160 + (pos.y-80)/40 + 12) #vertical ports
 	return v + h
 	
 func telepos(id):
 	var x
 	var y
-	if(id<16):
+	if(id<12):
 		#horizontal
 		x = (id*160+80)%640
 		y = ((id/4)*160)
 	else:
 		#vertical
-		id -= 16
-		x = (id*160)%800
-		y = ((id/5)*160+80)
+		id -= 12
+		x = (id*160)%640
+		y = ((id/4)*160+80)
 	return Vector2(x,y)
 
 func newtele(x,y,w,h):
@@ -66,7 +74,6 @@ func shuffle():
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	shuffle()
 	# create the teleports
 	for x in range(4):
 		for y in range (3):
@@ -75,7 +82,10 @@ func _ready():
 		newtele(160*x+80,480,76,1)
 	for y in range (3):
 		newtele(640,160*y+80,1,76)
-		
+	shuffle()
+	
+	for i in range(24):
+		print(i,telepos(i),teleid(telepos(i)))
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
