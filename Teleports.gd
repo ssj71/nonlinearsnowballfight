@@ -9,8 +9,17 @@ var telemap = []
 # 2 - all sides shuffle
 # 3 - teleports are non-transitive a->b but b->c
 
+const VERTICAL_ID_OFFSET = 12 #12 horizontal ids before the vertical ones
+const NEGATIVE_ID_OFFSET = 24 #24 ids, we store negative in the array after positive
+const TELEPORT_SIZE = 160 # size of side of each square bordered by teleports
+const TELEPORT_OFFSET = TELEPORT_SIZE/2 # offset of position to center teleport
+const TELEPORTS_PER_ROW = 4
+const WINDOW_WIDTH = 640 # pixels
+const WINDOW_HEIGHT = 480 #pixels
+
 #each teleport has an id based on its position, this makes shuffling easier
 #ids are assigned to all horizontal teleports, then all vertical
+#these are used for mapping
 #    0   1   2   3
 # 12   13  14  15  12
 #    4   5   6   7
@@ -20,22 +29,22 @@ var telemap = []
 #    0   1   2   3
 
 func teleid(pos):
-	var h = (int(pos.x)%160)/80*((pos.x-80)/160 + (int(pos.y)%480)/40) # horizontal ports
-	var v = (int(pos.y)%160)/80*((int(pos.x)%640)/160 + (pos.y-80)/40 + 12) #vertical ports
+	var h = (int(pos.x)%TELEPORT_SIZE)/TELEPORT_OFFSET*((pos.x-TELEPORT_OFFSET)/TELEPORT_SIZE + (int(pos.y)%WINDOW_HEIGHT)*TELEPORTS_PER_ROW/TELEPORT_SIZE) # horizontal ports
+	var v = (int(pos.y)%TELEPORT_SIZE)/TELEPORT_OFFSET*((int(pos.x)%WINDOW_WIDTH)/TELEPORT_SIZE + (pos.y-TELEPORT_OFFSET)*TELEPORTS_PER_ROW/TELEPORT_SIZE + VERTICAL_ID_OFFSET) #vertical ports
 	return v + h
 	
 func telepos(id):
 	var x
 	var y
-	if(id<12):
+	if(id<VERTICAL_ID_OFFSET):
 		#horizontal
-		x = (id*160+80)%640
-		y = ((id/4)*160)
+		x = (id*TELEPORT_SIZE+TELEPORT_OFFSET)%WINDOW_WIDTH
+		y = ((id/TELEPORTS_PER_ROW)*TELEPORT_SIZE)
 	else:
 		#vertical
-		id -= 12
-		x = (id*160)%640
-		y = ((id/4)*160+80)
+		id -= VERTICAL_ID_OFFSET
+		x = (id*TELEPORT_SIZE)%WINDOW_WIDTH
+		y = ((id/TELEPORTS_PER_ROW)*TELEPORT_SIZE+TELEPORT_OFFSET)
 	return Vector2(x,y)
 
 func newtele(x,y,w,h):
@@ -57,17 +66,17 @@ func shuffle():
 	randomize()
 	if nonlinearity == 1:
 		#shuffle the horizontal and vertical teleports separately
-		telemap = range(48)
-		for i in range(48):
+		telemap = range(2*NEGATIVE_ID_OFFSET)
+		for i in range(2*NEGATIVE_ID_OFFSET):
 			telemap[i] = -1
 		var i = 0
-		while i < 24:
+		while i < NEGATIVE_ID_OFFSET:
 			var repull = true
 			while repull:
 				var offset = i
-				if i >= 12:
-					offset -= 12
-				var v = randi()%(12-offset) + i
+				if i >= VERTICAL_ID_OFFSET:
+					offset -= VERTICAL_ID_OFFSET
+				var v = randi()%(VERTICAL_ID_OFFSET-offset) + i # limit the range to disclude already assigned values
 				if v == i or telemap[v] != -1:
 					repull = true
 				else:
@@ -75,9 +84,9 @@ func shuffle():
 					telemap[i] = v
 					telemap[v] = i
 					#and the negative
-					telemap[i+24] = v+24
-					telemap[v+24] = i+24
-			while telemap[i] != -1 and i < 24:
+					telemap[i+NEGATIVE_ID_OFFSET] = v+NEGATIVE_ID_OFFSET
+					telemap[v+NEGATIVE_ID_OFFSET] = i+NEGATIVE_ID_OFFSET
+			while telemap[i] != -1 and i < NEGATIVE_ID_OFFSET:
 				i += 1
 	#TODO: elif nonlinearity == 2:
 	print(telemap)
@@ -87,13 +96,16 @@ func _ready():
 	# create the teleports
 	for x in range(4):
 		for y in range (3):
-			newtele(160*x,160*y+80,1,76)
-			newtele(160*x+80,160*y,76,1)
-		newtele(160*x+80,480,76,1)
+			newtele(TELEPORT_SIZE*x, TELEPORT_SIZE*y+TELEPORT_OFFSET, 1, TELEPORT_OFFSET-4) #tall skinny teleports on sides of squares
+			newtele(TELEPORT_SIZE*x+TELEPORT_OFFSET, TELEPORT_SIZE*y, TELEPORT_OFFSET-4, 1) #wide teleports on top/bottom of squares
+		newtele(TELEPORT_SIZE*x+TELEPORT_OFFSET, WINDOW_HEIGHT, TELEPORT_OFFSET-4, 1)
 	for y in range (3):
-		newtele(640,160*y+80,1,76)
+		newtele(WINDOW_WIDTH, TELEPORT_SIZE*y+TELEPORT_OFFSET, 1, TELEPORT_OFFSET-4)
 	shuffle()
 	
+	#test that the id<->pos conversions are right
+	#for i in range(24):
+	#	print(i,teleid(telepos(i)))
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
