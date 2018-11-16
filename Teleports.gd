@@ -9,13 +9,13 @@ var telemap = []
 # 2 - all sides shuffle
 # 3 - teleports are non-transitive a->b but b->c
 
-const VERTICAL_ID_OFFSET = 12 #12 horizontal ids before the vertical ones
-const NEGATIVE_ID_OFFSET = 24 #24 ids, we store negative in the array after positive
-const TELEPORT_SIZE = 160 # size of side of each square bordered by teleports
-const TELEPORT_OFFSET = TELEPORT_SIZE/2 # offset of position to center teleport
-const TELEPORTS_PER_ROW = 4
-const WINDOW_WIDTH = 640 # pixels
-const WINDOW_HEIGHT = 480 #pixels
+const VERTICAL_ID_OFFSET = int(12) #12 horizontal ids before the vertical ones
+const NEGATIVE_ID_OFFSET = int(24) #24 ids, we store negative in the array after positive
+const TELEPORT_SIZE = int(160) # size of side of each square bordered by teleports
+const TELEPORT_OFFSET = int(80) # offset of position to center teleport
+const TELEPORTS_PER_ROW = int(4)
+const WINDOW_WIDTH = int(640) # pixels
+const WINDOW_HEIGHT = int(480) #pixels
 
 #each teleport has an id based on its position, this makes shuffling easier
 #ids are assigned to all horizontal teleports, then all vertical
@@ -36,15 +36,21 @@ func teleid(pos):
 func telepos(id):
 	var x
 	var y
-	if(id<VERTICAL_ID_OFFSET):
+	var baseid = int(id)%NEGATIVE_ID_OFFSET
+	if(baseid<VERTICAL_ID_OFFSET):
 		#horizontal
-		x = (id*TELEPORT_SIZE+TELEPORT_OFFSET)%WINDOW_WIDTH
-		y = ((id/TELEPORTS_PER_ROW)*TELEPORT_SIZE)
+		x = (baseid*TELEPORT_SIZE+TELEPORT_OFFSET)%WINDOW_WIDTH
+		y = ((baseid/TELEPORTS_PER_ROW)*TELEPORT_SIZE)
+		if id<NEGATIVE_ID_OFFSET && y == 0:
+			y = WINDOW_HEIGHT
 	else:
 		#vertical
-		id -= VERTICAL_ID_OFFSET
-		x = (id*TELEPORT_SIZE)%WINDOW_WIDTH
-		y = ((id/TELEPORTS_PER_ROW)*TELEPORT_SIZE+TELEPORT_OFFSET)
+		baseid -= VERTICAL_ID_OFFSET
+		x = (baseid*TELEPORT_SIZE)%WINDOW_WIDTH
+		y = ((baseid/TELEPORTS_PER_ROW)*TELEPORT_SIZE+TELEPORT_OFFSET)
+		if id<NEGATIVE_ID_OFFSET && x == 0:
+			x = WINDOW_WIDTH
+	print("tpos ",x,",",y)
 	return Vector2(x,y)
 
 func newtele(x,y,w,h):
@@ -56,11 +62,24 @@ func newtele(x,y,w,h):
 	col.shape = RectangleShape2D.new()
 	col.shape.extents.x = w
 	col.shape.extents.y = h
-	#var sp = Sprite.new() #tmp sprite to make sure its where we expect
-	#sp.texture = load("res://icon.png")
-	#col.add_child(sp)
+	var sp = Sprite.new() #tmp sprite to make sure its where we expect
+	sp.texture = load("res://icon.png")
+	col.add_child(sp)
 	tel.add_child(col)
 	add_child(tel)
+
+#get positional change for teleporting snowball
+func telejump(inid, outid):
+	var x = 0
+	var y = 0
+	return Vector2(x,y)
+
+#get rotation vector for teleporting snowball velocity
+func telerotate(inid, outid):
+	var x = 0
+	var y = 0
+	return Vector2(x,y)
+	
 	
 func shuffle():
 	randomize()
@@ -81,11 +100,12 @@ func shuffle():
 					repull = true
 				else:
 					repull = false
-					telemap[i] = v
-					telemap[v] = i
-					#and the negative
-					telemap[i+NEGATIVE_ID_OFFSET] = v+NEGATIVE_ID_OFFSET
-					telemap[v+NEGATIVE_ID_OFFSET] = i+NEGATIVE_ID_OFFSET
+					#positive in maps to negative out
+					telemap[i] = v+NEGATIVE_ID_OFFSET
+					telemap[v+NEGATIVE_ID_OFFSET] = i
+					#and the negative in goes out positive
+					telemap[i+NEGATIVE_ID_OFFSET] = v
+					telemap[v] = i+NEGATIVE_ID_OFFSET
 			while telemap[i] != -1 and i < NEGATIVE_ID_OFFSET:
 				i += 1
 	#TODO: elif nonlinearity == 2:

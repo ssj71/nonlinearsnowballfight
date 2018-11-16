@@ -65,6 +65,7 @@ bones = [  ]
 position = Vector2( 319, 241 )
 frames = SubResource( 1 )
 animation = "default"
+frame = 2
 playing = true
 
 [node name="Player" type="Area2D" parent="."]
