@@ -8,6 +8,8 @@ var origin = Vector2(0,0)
 var thrower
 var teleported = false
 
+const SNOWBALL_DIAMETER = 15
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -25,7 +27,7 @@ func hit(area):
 			print("kill player")
 		#we hit something, stop the ball
 		vel = vel.normalized()
-	elif area.name.match("@Teleport@*"):
+	elif area.name.match("*Teleport*"):
 		#add to teleported list
 		teleported = true
 		thrower = null #allow friendly fire
@@ -36,21 +38,25 @@ func hit(area):
 			#entering a horizontal teleport
 			if vel.y > 0:
 				#positive
+				position.y += SNOWBALL_DIAMETER
 				to = T.telemap[id] 
 			else:
 				#negative
+				position.y -= SNOWBALL_DIAMETER
 				id += T.NEGATIVE_ID_OFFSET
 				to = T.telemap[id] # teleport out id
 		else:
 			#entering a vertical teleport
 			if vel.x > 0:
+				#positive
+				position.x += SNOWBALL_DIAMETER
 				to = T.telemap[id] # teleport out id
 			else:
 				#negative
+				position.x -= SNOWBALL_DIAMETER
 				id += T.NEGATIVE_ID_OFFSET
 				to = T.telemap[id] # teleport out id
 		position += T.telepos(to) - T.telepos(id)
-		print("telid ",id," ",to)
 		#vel = Vector2(0,0)#kills the ball
 		#thrower = null
 	

@@ -1,16 +1,13 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://noisetexture0.tres" type="Texture" id=1]
 [ext_resource path="res://noisetexture1.tres" type="Texture" id=2]
 [ext_resource path="res://noisetexture2.tres" type="Texture" id=3]
 [ext_resource path="res://noisetexture3.tres" type="Texture" id=4]
-[ext_resource path="res://Player.gd" type="Script" id=5]
-[ext_resource path="res://man-stand.svg" type="Texture" id=6]
-[ext_resource path="res://man-run1.svg" type="Texture" id=7]
-[ext_resource path="res://man-run2.svg" type="Texture" id=8]
-[ext_resource path="res://man-run3.svg" type="Texture" id=9]
-[ext_resource path="res://Balls.gd" type="Script" id=10]
-[ext_resource path="res://Teleports.gd" type="Script" id=11]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Balls.gd" type="Script" id=6]
+[ext_resource path="res://Teleports.gd" type="Script" id=7]
+[ext_resource path="res://AI.gd" type="Script" id=8]
 
 [sub_resource type="SpriteFrames" id=1]
 
@@ -21,30 +18,9 @@ animations = [ {
 "speed": 5.19
 } ]
 
-[sub_resource type="CapsuleShape2D" id=2]
-
-custom_solver_bias = 0.0
-radius = 14.9246
-height = 20.0
-
-[sub_resource type="SpriteFrames" id=3]
-
-animations = [ {
-"frames": [ ExtResource( 6 ) ],
-"loop": false,
-"name": "stand",
-"speed": 1.0
-}, {
-"frames": [ ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ) ],
-"loop": true,
-"name": "run",
-"speed": 7.0
-} ]
-
 [node name="Node2D" type="Node2D"]
 
 [node name="BG" type="Polygon2D" parent="."]
-position = Vector2( 1, -2 )
 polygon = PoolVector2Array( 0, 0, 640, 0, 640, 480, 0, 480 )
 uv = PoolVector2Array(  )
 splits = PoolIntArray(  )
@@ -62,36 +38,20 @@ invert_border = 100.0
 bones = [  ]
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="BG"]
-position = Vector2( 319, 241 )
+position = Vector2( 360, 239.143 )
 frames = SubResource( 1 )
 animation = "default"
-frame = 2
+frame = 1
 playing = true
 
-[node name="Player" type="Area2D" parent="."]
-input_pickable = true
-gravity_vec = Vector2( 0, 1 )
-gravity = 98.0
-linear_damp = 0.1
-angular_damp = 1.0
-audio_bus_override = false
-audio_bus_name = "Master"
-script = ExtResource( 5 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
-position = Vector2( 62, 76 )
-shape = SubResource( 2 )
-
-[node name="AnimatedSprite" type="AnimatedSprite" parent="Player/CollisionShape2D"]
-position = Vector2( -0.315601, -3.4711 )
-scale = Vector2( 1.5, 1.5 )
-frames = SubResource( 3 )
-animation = "stand"
-playing = true
+[node name="Player" parent="." instance=ExtResource( 5 )]
 
 [node name="Balls" type="Node2D" parent="."]
-script = ExtResource( 10 )
+script = ExtResource( 6 )
 
 [node name="Teleports" type="Node2D" parent="."]
-script = ExtResource( 11 )
+script = ExtResource( 7 )
+
+[node name="AI" type="Node2D" parent="."]
+script = ExtResource( 8 )
 
