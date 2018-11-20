@@ -16,8 +16,8 @@ _global_script_class_icons={
 [application]
 
 config/name="NonLinearSnowBallFight"
-run/main_scene="res://fight.tscn"
-config/icon="res://icon.png"
+run/main_scene="res://Main.tscn"
+config/icon="res://ball.png"
 
 [display]
 

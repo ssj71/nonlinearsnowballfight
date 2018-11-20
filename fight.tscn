@@ -1,57 +1,20 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://noisetexture0.tres" type="Texture" id=1]
-[ext_resource path="res://noisetexture1.tres" type="Texture" id=2]
-[ext_resource path="res://noisetexture2.tres" type="Texture" id=3]
-[ext_resource path="res://noisetexture3.tres" type="Texture" id=4]
-[ext_resource path="res://Player.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Balls.gd" type="Script" id=6]
-[ext_resource path="res://Teleports.gd" type="Script" id=7]
-[ext_resource path="res://AI.gd" type="Script" id=8]
-
-[sub_resource type="SpriteFrames" id=1]
-
-animations = [ {
-"frames": [ ExtResource( 1 ), ExtResource( 2 ), ExtResource( 3 ), ExtResource( 4 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.19
-} ]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Balls.gd" type="Script" id=2]
+[ext_resource path="res://Teleports.gd" type="Script" id=3]
+[ext_resource path="res://AI.gd" type="Script" id=4]
 
 [node name="Node2D" type="Node2D"]
 
-[node name="BG" type="Polygon2D" parent="."]
-polygon = PoolVector2Array( 0, 0, 640, 0, 640, 480, 0, 480 )
-uv = PoolVector2Array(  )
-splits = PoolIntArray(  )
-color = Color( 1, 1, 1, 1 )
-vertex_colors = PoolColorArray(  )
-offset = Vector2( 0, 0 )
-antialiased = false
-texture = null
-texture_offset = Vector2( 0, 0 )
-texture_scale = Vector2( 1, 1 )
-texture_rotation_degrees = 0.0
-skeleton = NodePath("")
-invert_enable = false
-invert_border = 100.0
-bones = [  ]
-
-[node name="AnimatedSprite" type="AnimatedSprite" parent="BG"]
-position = Vector2( 360, 239.143 )
-frames = SubResource( 1 )
-animation = "default"
-frame = 1
-playing = true
-
-[node name="Player" parent="." instance=ExtResource( 5 )]
+[node name="Player" parent="." instance=ExtResource( 1 )]
 
 [node name="Balls" type="Node2D" parent="."]
-script = ExtResource( 6 )
+script = ExtResource( 2 )
 
 [node name="Teleports" type="Node2D" parent="."]
-script = ExtResource( 7 )
+script = ExtResource( 3 )
 
 [node name="AI" type="Node2D" parent="."]
-script = ExtResource( 8 )
+script = ExtResource( 4 )
 
