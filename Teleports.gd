@@ -49,7 +49,6 @@ func telepos(id):
 		y = ((baseid/TELEPORTS_PER_ROW)*TELEPORT_SIZE+TELEPORT_OFFSET)
 		if id<NEGATIVE_ID_OFFSET && x == 0:
 			x = WINDOW_WIDTH
-	print("tpos ",x,",",y)
 	return Vector2(x,y)
 
 func newtele(x,y,w,h):
@@ -113,7 +112,6 @@ func shuffle():
 			while telemap[i] != -1 and i < NEGATIVE_ID_OFFSET:
 				i += 1
 	#TODO: elif nonlinearity == 2:
-	print(telemap)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

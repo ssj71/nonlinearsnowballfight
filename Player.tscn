@@ -27,6 +27,7 @@ animations = [ {
 } ]
 
 [node name="Player" type="Area2D"]
+position = Vector2( 360, 240 )
 input_pickable = true
 gravity_vec = Vector2( 0, 1 )
 gravity = 98.0

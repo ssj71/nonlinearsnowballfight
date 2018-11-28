@@ -12,23 +12,23 @@ const SNOWBALL_DIAMETER = 15
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	$Area2D.connect("area_entered",self,"hit")
 	pass # Replace with function body.
 
-func hookup(parent):
-	$Area2D.connect("area_entered",self,"hit")
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
 
 func hit(area):
-	if area.name == "Player" && area != thrower:
+	if area.name.match("Player*") && area != thrower:
 		if teleported:
-			area.free()
-			print("kill player")
+			print("killing ",area.name,area.index)
+			get_node("../..").kill(area.index)
+		else:
+			print("not killing ",area.name,area.index)
 		#we hit something, stop the ball
 		vel = vel.normalized()
 	elif area.name.match("*Teleport*"):
-		#add to teleported list
 		teleported = true
 		thrower = null #allow friendly fire
 		var T = get_node("../../Teleports")
