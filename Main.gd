@@ -1,7 +1,7 @@
 extends Node2D
 #main
 
-var nplayers = 1
+var players = []
 var nonlinearity = 1
 var score = []
 var ailevel = 1
@@ -31,30 +31,55 @@ func _ready():
 	
 	
 func _Play_pressed():
+	players = current_scn.players
+	if players.size() == 0:
+		return
+		
 	remove_child(current_scn)
 	current_scn = load("res://fight.tscn").instance()
 	add_child(current_scn)
-	var p = load("res://Player.tscn").instance()
-	p.name = "Player0"
-	p.index = 0
+	current_scn.players = players
+	
+	
 	var pc = current_scn.get_node("Players") #player collection
-	pc.add_child(p)
-	p.set_color(colors[0])
-	#$current_scn/Players.add_child(p)
+	var p
+	var pp
+	for i in range(players.size()):
+		p = load("res://Player.tscn").instance()
+		p.name = "Player"+String(i)
+		p.index = i
+		p.position = Vector2(210 + 100*i,300)
+		pc.add_child(p)
+		p.set_color(colors[i])
+	
+	#extra randy NPC if solo
+	if players.size() == 1:
+		p = load("res://Randy.tscn").instance()
+		p.name = "Player1"
+		pc.add_child(p)
+		p.index = 1
+		pp = p.get_node("Player")
+		pp.position = Vector2(310,300)
+		pp.index = p.index
+		p.set_color(colors[1])
 	
 	p = load("res://Ralf.tscn").instance()
-	p.name = "Player1"
-	pc.add_child(p)
-	p.index = 1
-	p.get_node("Player").index = p.index
-	p.set_color(colors[1])
-
-	p = load("res://Randy.tscn").instance()
 	p.name = "Player2"
 	pc.add_child(p)
 	p.index = 2
-	p.get_node("Player").index = p.index
+	pp = p.get_node("Player")
+	pp.position = Vector2(410,300)
+	pp.index = p.index
 	p.set_color(colors[2])
+
+	p = load("res://Randy.tscn").instance()
+	p.name = "Player3"
+	pc.add_child(p)
+	p.index = 3
+	pp = p.get_node("Player")
+	pp.position = Vector2(510,300)
+	pp.index = p.index
+	p.set_color(colors[3])
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
@@ -67,4 +92,6 @@ func winner(i):
 	add_child(current_scn)
 	current_scn.set_colors(colors)
 	current_scn.set_scores(score)
+	for p in players:
+		current_scn.add_player(p)
 	

@@ -1,9 +1,7 @@
 extends Node2D
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
 var scores
+var players = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -27,7 +25,17 @@ func set_colors(colorarray):
 		scores[i].modulate = colorarray[i]
 
 func _input(event):
-	print(event)
+	if event is InputEventKey:
+		if event.pressed:
+			if (event.scancode == KEY_SPACE and not players.has(KEY_SPACE)) or event.scancode == KEY_SHIFT and not players.has(KEY_SHIFT):
+				add_player(event.scancode)
+
+func add_player(key):
+	var p = load("res://Player.tscn").instance()
+	add_child(p)
+	p.set_color(scores[players.size()].modulate)
+	p.position = Vector2(210 + 100*players.size(),300)
+	players.append(key)
 
 func _on_Quit_pressed():
 	get_tree().quit()

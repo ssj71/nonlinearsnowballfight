@@ -3,7 +3,7 @@ extends Node2D
 var tim
 var index
 
-# Steve is Strategic
+# Steve is Strategic (but not yet actually)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

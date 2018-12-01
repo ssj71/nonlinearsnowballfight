@@ -4,6 +4,7 @@ extends Node2D
 # var a = 2
 # var b = "text"
 var ctl = []
+var players
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -11,9 +12,16 @@ func _ready():
 		ctl.append([])
 	pass # Replace with function body.
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func ctl_player(i,d,w):
+	var p = $Players.get_node("Player"+String(i))
+	if p != null:
+		p.set_direction(d)
+		p.windup = w
+	
+
+func check_arrows(i):
 	var d = Vector2(0,0)
+	var w = false
 	if Input.is_key_pressed(KEY_RIGHT):
 		d.x = 1
 	if Input.is_key_pressed(KEY_LEFT):
@@ -22,15 +30,33 @@ func _process(delta):
 		d.y = -1
 	if Input.is_key_pressed(KEY_DOWN):
 		d.y = 1
-	#todo, what if p1 is dead
-	if $Players.get_node("Player0") != null:
-		$Players/Player0.set_direction(d)
-		if Input.is_key_pressed(KEY_SPACE):
-			$Players/Player0.windup = true
-		else:
-			$Players/Player0.windup = false
-	#if $Players.get_child_count() == 1:
-		#round over
+	if Input.is_key_pressed(KEY_SPACE):
+		w = true
+	ctl_player(i,d,w)
+			
+func check_aswd(i):
+	var d = Vector2(0,0)
+	var w = false
+	if Input.is_key_pressed(KEY_D):
+		d.x = 1
+	if Input.is_key_pressed(KEY_A):
+		d.x = -1
+	if Input.is_key_pressed(KEY_W):
+		d.y = -1
+	if Input.is_key_pressed(KEY_S):
+		d.y = 1
+	if Input.is_key_pressed(KEY_SHIFT):
+		w = true
+	ctl_player(i,d,w)
+	
+
+# polling for inputs is horrible, but I don't have a better way right now
+func _process(delta):
+	for i in range(players.size()):
+		if players[i] == KEY_SPACE:
+			check_arrows(i)
+		elif players[i] == KEY_SHIFT:
+			check_aswd(i)
 
 func kill(index):
 	for i in range($Players.get_child_count()):
